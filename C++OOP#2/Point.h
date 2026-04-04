@@ -8,47 +8,50 @@ using namespace std;
 
 class Point
 {
-    double x;
-    double y;
+
+    double x, y;
+    static int pointCount;
 
 public:
-    // Конструкторы
-    Point() : x(0), y(0) {} 
-    Point(double _x, double _y) : x(_x), y(_y) {}
+    // Делегирование конструкторов
+    Point() : Point(0, 0) {}
 
-    // Аксессоры
-    inline double getX() const { return x; }
-    inline double getY() const { return y; }
-    inline void setX(double _x) { x = _x; }
-    inline void setY(double _y) { y = _y; }
-
-    // Функции для ввода и вывода
-    inline void input() {
-        cout << "Введите x: "; cin >> x;
-        cout << "Введите y: "; cin >> y;
+    Point(double _x, double _y) : x(_x), y(_y)
+    {
+        pointCount++;
     }
 
-    inline void display() const {
-        cout << "Точка(" << x << ", " << y << ")" << endl;
+    // Деструктор
+    ~Point()
+    {
+        pointCount--;
     }
 
-    // Сохранение в файл
-    void save(const char* filename) const {
+
+    static int getPointCount()
+    {
+        return pointCount;
+    }
+
+
+    inline void input()
+    {
+        cout << "Enter X and Y: ";
+        cin >> x >> y;
+    }
+
+    inline void display() const
+    {
+        cout << "Point(" << x << ", " << y << ")" << endl;
+    }
+
+    void save(const char* filename) const
+    {
         ofstream out(filename);
-        if (out.is_open()) {
-            out << x << " " << y;
-            out.close();
-        }
-    }
-
-    // Загрузка из файла
-    void load(const char* filename) {
-        ifstream in(filename);
-        if (in.is_open()) {
-            in >> x >> y;
-            in.close();
-        }
+        if (out.is_open()) out << x << " " << y;
     }
 };
+
+int Point::pointCount = 0;
 
 #endif
